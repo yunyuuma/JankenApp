@@ -11,17 +11,17 @@ public class JankenApp {
         System.out.println("じゃんけんぽん！");
         System.out.print("0:グー 1:チョキ 2:パー → ");
 
-        int user = scanner.nextInt();
-        int cpu = random.nextInt(3);
+        int yuma = scanner.nextInt();
+        int PPC = random.nextInt(3);
 
-        System.out.println("あなた: " + hands[user]);
-        System.out.println("CPU: " + hands[cpu]);
+        System.out.println("あなた: " + hands[yuma]);
+        System.out.println("CPU: " + hands[PPC]);
 
-        if (user == cpu) {
+        if (yuma == PPC) {
             System.out.println("あいこ！");
-        } else if ((user == 0 && cpu == 1) ||
-                   (user == 1 && cpu == 2) ||
-                   (user == 2 && cpu == 0)) {
+        } else if ((yuma == 0 && PPC == 1) ||
+                   (yuma == 1 && PPC == 2) ||
+                   (yuma == 2 && PPC == 0)) {
             System.out.println("あなたの勝ち！");
         } else {
             System.out.println("あなたの負け！");
@@ -30,3 +30,4 @@ public class JankenApp {
         scanner.close();
     }
 }
+
