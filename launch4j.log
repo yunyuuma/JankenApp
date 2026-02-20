@@ -1,22 +1,40 @@
 
 
 Version:	3.50
-CmdLine:	C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\JankenGame.exe --l4j-debug
+CmdLine:	C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\JankenApp\JankenApp.exe --l4j-debug
 JNI:		No
 WOW64:		Yes
-Working dir:	C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\.
+Working dir:	C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\JankenApp\.
 Requires JDK:	No
-Requires 64-Bit: Yes
-Java min ver:	1.008.000
+Requires 64-Bit: No
+Java min ver:	1.011.000
 Java max ver:	
 Substitute:	JAVA_HOME = C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\
-Substitute:	PATH = C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\bin;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\Wolfram Research\WolframScript\;C:\Program Files\SASHome\SASFoundation\9.4\core\sasexe;C:\Program Files\SASHome\SASFoundation\9.4\core\sasext;C:\Users\nekoc\AppData\Local\Microsoft\WindowsApps;C:\Users\nekoc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\nekoc\AppData\Local\GitHubDesktop\bin;C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\\bin
-JRE paths:	C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\;C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\bin;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\Wolfram Research\WolframScript\;C:\Program Files\SASHome\SASFoundation\9.4\core\sasexe;C:\Program Files\SASHome\SASFoundation\9.4\core\sasext;C:\Users\nekoc\AppData\Local\Microsoft\WindowsApps;C:\Users\nekoc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\nekoc\AppData\Local\GitHubDesktop\bin;C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\\bin
+Substitute:	PATH = C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\bin;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\Wolfram Research\WolframScript\;C:\Program Files\SASHome\SASFoundation\9.4\core\sasexe;C:\Program Files\SASHome\SASFoundation\9.4\core\sasext;C:\Program Files\nodejs\;C:\Users\nekoc\AppData\Local\Microsoft\WindowsApps;C:\Users\nekoc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\nekoc\AppData\Local\GitHubDesktop\bin;C:\Users\nekoc\AppData\Roaming\npm;C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\\bin
+JRE paths:	C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\;C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\bin;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\Wolfram Research\WolframScript\;C:\Program Files\SASHome\SASFoundation\9.4\core\sasexe;C:\Program Files\SASHome\SASFoundation\9.4\core\sasext;C:\Program Files\nodejs\;C:\Users\nekoc\AppData\Local\Microsoft\WindowsApps;C:\Users\nekoc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\nekoc\AppData\Local\GitHubDesktop\bin;C:\Users\nekoc\AppData\Roaming\npm;C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\\bin
 Check launcher:	C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\bin\javaw.exe (OK)
 Version string: 1.017.000_018 / 64-Bit (OK)
-Main class:	JankenGame
-Add classpath:	sqlite-jdbc-3.7.2.jar
 Launcher:	C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\bin\javaw.exe
-Launcher args:	-Dfile.encoding=UTF-8 -classpath "C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\JankenGame.exe;sqlite-jdbc-3.7.2.jar" JankenGame
-Args length:	135/32768 chars
+Launcher args:	-jar "C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\JankenApp\JankenApp.exe"
+Args length:	83/32768 chars
+Exit code:	0
+
+
+Version:	3.50
+CmdLine:	C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\JankenApp\JankenApp.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\JankenApp\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	1.011.000
+Java max ver:	
+Substitute:	JAVA_HOME = C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\
+Substitute:	PATH = C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\bin;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\Wolfram Research\WolframScript\;C:\Program Files\SASHome\SASFoundation\9.4\core\sasexe;C:\Program Files\SASHome\SASFoundation\9.4\core\sasext;C:\Program Files\nodejs\;C:\Users\nekoc\AppData\Local\Microsoft\WindowsApps;C:\Users\nekoc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\nekoc\AppData\Local\GitHubDesktop\bin;C:\Users\nekoc\AppData\Roaming\npm;C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\\bin
+JRE paths:	C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\;C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\bin;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\Wolfram Research\WolframScript\;C:\Program Files\SASHome\SASFoundation\9.4\core\sasexe;C:\Program Files\SASHome\SASFoundation\9.4\core\sasext;C:\Program Files\nodejs\;C:\Users\nekoc\AppData\Local\Microsoft\WindowsApps;C:\Users\nekoc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\nekoc\AppData\Local\GitHubDesktop\bin;C:\Users\nekoc\AppData\Roaming\npm;C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\\bin
+Check launcher:	C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\bin\javaw.exe (OK)
+Version string: 1.017.000_018 / 64-Bit (OK)
+Launcher:	C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot\bin\javaw.exe
+Launcher args:	-jar "C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\JankenApp\JankenApp.exe"
+Args length:	83/32768 chars
 Exit code:	0

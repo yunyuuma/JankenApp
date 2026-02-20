@@ -2,8 +2,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\JankenGame.jar</jar>
-  <outfile>C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\JankenGame.exe</outfile>
+  <jar>C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\JankenApp\JankenApp-fat.jar</jar>
+  <outfile>C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\JankenApp\JankenApp.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
@@ -13,17 +13,12 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\janken.ico</icon>
-  <classPath>
-    <mainClass>JankenGame</mainClass>
-    <cp>sqlite-jdbc-3.7.2.jar</cp>
-  </classPath>
+  <icon>C:\Users\nekoc\OneDrive\デスクトップ\Github\20260219\JankenApp\janken.ico</icon>
   <jre>
     <path>%JAVA_HOME%;%PATH%</path>
     <requiresJdk>false</requiresJdk>
-    <requires64Bit>true</requires64Bit>
-    <minVersion>1.8.0</minVersion>
+    <requires64Bit>false</requires64Bit>
+    <minVersion>11</minVersion>
     <maxVersion></maxVersion>
-    <opt>-Dfile.encoding=UTF-8</opt>
   </jre>
 </launch4jConfig>
