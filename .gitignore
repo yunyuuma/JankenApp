@@ -1,0 +1,7 @@
+*.class
+*.jar
+*.exe
+bin/
+out/
+*.db
+.vscode/
