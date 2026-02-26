@@ -22,66 +22,109 @@ public class PointModePanel implements ModePanel {
 
     @Override
     public JPanel build() {
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
 
-        JButton back = new JButton("←戻る");
+        JPanel root = new JPanel(new BorderLayout(10, 10));
+
+        JButton back = new JButton("戻る");
         back.addActionListener(e -> onBackToMenu.run());
-        panel.add(back, BorderLayout.NORTH);
+        root.add(back, BorderLayout.NORTH);
 
-        JLabel remain = big("残り：10回");
-        JLabel point = normal("ポイント：0");
-        JLabel handInfo = normal("あなた / CPU");
+        JLabel title = big("残り10回");
+        JLabel pointLabel = normal("ポイント: 0");
+        JLabel resultLabel = normal("結果: -");
         JLabel cpuImage = new JLabel(handIcons[0], SwingConstants.CENTER);
 
         JPanel center = new JPanel(new GridLayout(4, 1, 10, 10));
-        center.add(remain);
-        center.add(point);
-        center.add(handInfo);
+        center.add(title);
+        center.add(pointLabel);
+        center.add(resultLabel);
         center.add(cpuImage);
-        panel.add(center, BorderLayout.CENTER);
 
-        int[] state = {10, 0}; // 残り, ポイント
+        root.add(center, BorderLayout.CENTER);
 
-        CpuAnimator anim = new CpuAnimator(cpuImage, handIcons, random, 80);
-        anim.start();
+        // state: [remain, point]
+        int[] state = new int[]{10, 0};
 
-        HandButtonsPanel buttons = new HandButtonsPanel(handIcons, player -> {
+        // CPUアニメーション
+        CpuAnimator animator = new CpuAnimator(cpuImage, handIcons, random, 80);
+        animator.start();
+
+        HandButtonsPanel buttons = new HandButtonsPanel(handIcons, playerHand -> {
+
             if (state[0] <= 0) return;
 
-            int cpu = random.nextInt(3);
-            cpuImage.setIcon(handIcons[cpu]);
+            animator.stop();
 
-            // player勝ち：+2 / 負け：-1 / あいこ：0
-            if ((cpu + 1) % 3 == player) state[1] += 2;
-            else if (player != cpu) state[1] -= 1;
+            int cpuHand = animator.getCurrentHand();
+            cpuImage.setIcon(handIcons[cpuHand]);
+
+            int result = judge(playerHand, cpuHand);
+
+            if (result == 1) {
+                state[1] += 2;        // 勝ち +2
+            } else if (result == -1) {
+                state[1] -= 1;        // 負け -1
+            }
+            // あいこは変化なし
 
             state[0]--;
-            remain.setText("残り：" + state[0] + "回");
-            point.setText("ポイント：" + state[1]);
-            handInfo.setText("あなた：" + HandButtonsPanel.handName(player) + " / CPU：" + HandButtonsPanel.handName(cpu));
 
-            if (state[0] == 0) finishGame(state[1]);
+            title.setText("残り" + state[0] + "回");
+            pointLabel.setText("ポイント: " + state[1]);
+            resultLabel.setText(
+                    "結果: " +
+                            HandButtonsPanel.handName(playerHand) +
+                            " / CPU " +
+                            HandButtonsPanel.handName(cpuHand)
+            );
+
+            if (state[0] == 0) {
+                finishGame(state[1]);
+                return;
+            }
+
+            // 次ラウンド：少し待ってアニメ再開
+            new Timer(800, e -> {
+                animator.start();
+                ((Timer) e.getSource()).stop();
+            }).start();
         });
 
-        panel.add(buttons, BorderLayout.SOUTH);
-        return panel;
+        root.add(buttons, BorderLayout.SOUTH);
+        return root;
     }
 
-    private JLabel big(String t) {
-        JLabel l = new JLabel(t, SwingConstants.CENTER);
+    private static int judge(int player, int cpu) {
+
+        if (player == cpu) return 0;
+
+        // プレイヤー勝ち条件
+        if ((player == 0 && cpu == 1) ||  // グー > チョキ
+            (player == 1 && cpu == 2) ||  // チョキ > パー
+            (player == 2 && cpu == 0)) {  // パー > グー
+            return 1;
+        }
+
+        return -1; // それ以外は負け
+    }
+
+    private JLabel big(String text) {
+        JLabel l = new JLabel(text, SwingConstants.CENTER);
         l.setFont(new Font("Meiryo", Font.BOLD, 24));
         return l;
     }
 
-    private JLabel normal(String t) {
-        JLabel l = new JLabel(t, SwingConstants.CENTER);
+    private JLabel normal(String text) {
+        JLabel l = new JLabel(text, SwingConstants.CENTER);
         l.setFont(new Font("Meiryo", Font.PLAIN, 16));
         return l;
     }
 
     private void finishGame(int score) {
-        String name = ScoreManager.getCurrentPlayer();
-        if (name != null && !name.isBlank()) ScoreManager.commitGame(name, score);
+        String player = ScoreManager.getCurrentPlayer();
+        if (player != null && !player.isBlank()) {
+            ScoreManager.commitGame(player, score);
+        }
         JOptionPane.showMessageDialog(null, ScoreManager.getRanking());
         onBackToMenu.run();
     }

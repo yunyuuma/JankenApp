@@ -1,7 +1,6 @@
 package mode;
 
 import app.ScoreManager;
-import ui.CpuAnimator;
 import ui.HandButtonsPanel;
 
 import javax.swing.*;
@@ -14,6 +13,21 @@ public class ReverseModePanel implements ModePanel {
     private final ImageIcon[] handIcons;
     private final Random random;
 
+    // CPUの手を保持
+    private int currentCpuHand = 0;
+
+    // 入力受付フラグ
+    private boolean waitingInput = false;
+
+    // 状態
+    private int remain = 10;
+    private int score = 0;
+
+    // テンポ・制限時間
+    private static final int CHANT_MS = 400;
+    private static final int LIMIT_MS = 1000;
+    private static final int NEXT_ROUND_WAIT_MS = 1000;
+
     public ReverseModePanel(Runnable onBackToMenu, ImageIcon[] handIcons, Random random) {
         this.onBackToMenu = onBackToMenu;
         this.handIcons = handIcons;
@@ -22,110 +36,173 @@ public class ReverseModePanel implements ModePanel {
 
     @Override
     public JPanel build() {
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
 
-        JButton back = new JButton("←戻る");
+        JPanel root = new JPanel(new BorderLayout(10, 10));
+
+        JButton back = new JButton("戻る");
         back.addActionListener(e -> onBackToMenu.run());
-        panel.add(back, BorderLayout.NORTH);
+        root.add(back, BorderLayout.NORTH);
 
-        JLabel remain = big("残り：10回");
-        JLabel success = normal("成功：0");
-        JComboBox<String> goal = new JComboBox<>(new String[]{"勝つ", "負ける"});
-        JLabel handInfo = normal("あなた / CPU");
+        JLabel title = big("残り10回");
+        JLabel scoreLabel = normal("スコア: 0");
+        JLabel chantLabel = big("じゃん");
+
+        JComboBox<String> goalBox = new JComboBox<>(new String[]{"勝つ", "負ける"});
         JLabel cpuImage = new JLabel(handIcons[0], SwingConstants.CENTER);
 
         JPanel center = new JPanel(new GridLayout(5, 1, 10, 10));
-        center.add(remain);
-        center.add(goal);
-        center.add(success);
-        center.add(handInfo);
+        center.add(title);
+        center.add(goalBox);
+        center.add(scoreLabel);
+        center.add(chantLabel);
         center.add(cpuImage);
-        panel.add(center, BorderLayout.CENTER);
 
-        int[] state = {10, 0};     // 残り, 成功
-        int[] showMs = {900};      // 後出し決定までの時間（短縮）
-        boolean[] busy = {false};
+        root.add(center, BorderLayout.CENTER);
 
-        CpuAnimator idleAnim = new CpuAnimator(cpuImage, handIcons, random, 80);
-        idleAnim.start();
+        HandButtonsPanel buttons = new HandButtonsPanel(handIcons, playerHand -> {
 
-        HandButtonsPanel buttons = new HandButtonsPanel(handIcons, player -> {
-            if (state[0] <= 0) return;
-            if (busy[0]) return;
-            busy[0] = true;
+            if (!waitingInput) return;
 
-            idleAnim.stop();
+            waitingInput = false;
 
-            // 決定までの切り替え表示
-            Timer shuffle = new Timer(50, e -> cpuImage.setIcon(handIcons[random.nextInt(3)]));
-            shuffle.start();
+            boolean success = isGoalAchieved(
+                    playerHand,
+                    currentCpuHand,
+                    (String) goalBox.getSelectedItem()
+            );
 
-            int delay = showMs[0];
-            new Timer(delay, ev -> {
-                shuffle.stop();
+            if (success) {
+                score++;
+                chantLabel.setText("成功！");
+            } else {
+                score--;
+                chantLabel.setText("失敗！");
+            }
 
-                String g = (String) goal.getSelectedItem(); // 勝負
-                int cpu = chooseCpuForGoal(player, g);       // 必ず目標どおり
-
-                cpuImage.setIcon(handIcons[cpu]);
-                handInfo.setText("あなた：" + HandButtonsPanel.handName(player) + " / CPU：" + HandButtonsPanel.handName(cpu));
-
-                if (isGoalAchieved(player, cpu, g)) state[1]++;
-
-                state[0]--;
-                remain.setText("残り：" + state[0] + "回");
-                success.setText("成功：" + state[1]);
-
-                // だんだん短く（下限200ms）
-                showMs[0] = Math.max(200, showMs[0] - 80);
-
-                if (state[0] == 0) {
-                    finishGame(state[1]);
-                } else {
-                    idleAnim.start();
-                    busy[0] = false;
-                }
-
-                ((Timer) ev.getSource()).stop();
-            }).start();
+            nextRound(title, scoreLabel, chantLabel, cpuImage);
         });
 
-        panel.add(buttons, BorderLayout.SOUTH);
-        return panel;
+        root.add(buttons, BorderLayout.SOUTH);
+
+        // 初回開始
+        startRound(title, scoreLabel, chantLabel, cpuImage);
+
+        return root;
     }
 
-    private int chooseCpuForGoal(int player, String goal) {
-        // hand: 0=グー 1=チョキ 2=パー
-        // playerが勝つ → cpuは playerに負ける手： (player+1)%3
-        // playerが負ける → cpuは playerに勝つ手： (player+2)%3
-        if ("勝つ".equals(goal)) return (player + 1) % 3;
-        return (player + 2) % 3;
+    private void startRound(JLabel title,
+                            JLabel scoreLabel,
+                            JLabel chantLabel,
+                            JLabel cpuImage) {
+
+        if (remain <= 0) {
+            finishGame();
+            return;
+        }
+
+        title.setText("残り" + remain + "回");
+        scoreLabel.setText("スコア: " + score);
+
+        waitingInput = false;
+        chantLabel.setText("じゃん");
+
+        // じゃん
+        Timer t1 = new Timer(CHANT_MS, e1 -> {
+            chantLabel.setText("けん");
+
+            // けん
+            Timer t2 = new Timer(CHANT_MS, e2 -> {
+                chantLabel.setText("ぽん！");
+
+                // CPU手決定（先に出す）
+                currentCpuHand = random.nextInt(3);
+                cpuImage.setIcon(handIcons[currentCpuHand]);
+
+                waitingInput = true;
+
+                // TIME UP（制限時間）
+                Timer timeout = new Timer(LIMIT_MS, e3 -> {
+                    if (waitingInput) {
+                        waitingInput = false;
+                        chantLabel.setText("TIME UP");
+                        score--;
+                        nextRound(title, scoreLabel, chantLabel, cpuImage);
+                    }
+                    ((Timer) e3.getSource()).stop();
+                });
+                timeout.setRepeats(false);
+                timeout.start();
+
+                ((Timer) e2.getSource()).stop();
+            });
+            t2.setRepeats(false);
+            t2.start();
+
+            ((Timer) e1.getSource()).stop();
+        });
+        t1.setRepeats(false);
+        t1.start();
+    }
+
+    private void nextRound(JLabel title,
+                           JLabel scoreLabel,
+                           JLabel chantLabel,
+                           JLabel cpuImage) {
+
+        remain--;
+
+        Timer next = new Timer(NEXT_ROUND_WAIT_MS, e -> {
+            ((Timer) e.getSource()).stop();
+            startRound(title, scoreLabel, chantLabel, cpuImage);
+        });
+        next.setRepeats(false);
+        next.start();
     }
 
     private boolean isGoalAchieved(int player, int cpu, String goal) {
-        boolean playerWin  = ((cpu + 1) % 3 == player);
-        boolean playerLose = ((player + 1) % 3 == cpu);
-        if ("勝つ".equals(goal)) return playerWin;
-        if ("負ける".equals(goal)) return playerLose;
+        int j = judge(player, cpu); // 1=勝ち 0=あいこ -1=負け
+
+        if ("勝つ".equals(goal)) return j == 1;
+        if ("負ける".equals(goal)) return j == -1;
+
         return false;
     }
 
-    private JLabel big(String t) {
-        JLabel l = new JLabel(t, SwingConstants.CENTER);
-        l.setFont(new Font("Meiryo", Font.BOLD, 24));
+    private static int judge(int player, int cpu) {
+
+        if (player == cpu) return 0;
+
+        // プレイヤー勝ち条件
+        if ((player == 0 && cpu == 1) ||  // グー > チョキ
+            (player == 1 && cpu == 2) ||  // チョキ > パー
+            (player == 2 && cpu == 0)) {  // パー > グー
+            return 1;
+        }
+
+        return -1; // それ以外は負け
+    }
+
+    private JLabel big(String text) {
+        JLabel l = new JLabel(text, SwingConstants.CENTER);
+        l.setFont(new Font("Meiryo", Font.BOLD, 26));
         return l;
     }
 
-    private JLabel normal(String t) {
-        JLabel l = new JLabel(t, SwingConstants.CENTER);
+    private JLabel normal(String text) {
+        JLabel l = new JLabel(text, SwingConstants.CENTER);
         l.setFont(new Font("Meiryo", Font.PLAIN, 16));
         return l;
     }
 
-    private void finishGame(int score) {
-        String name = ScoreManager.getCurrentPlayer();
-        if (name != null && !name.isBlank()) ScoreManager.commitGame(name, score);
-        JOptionPane.showMessageDialog(null, ScoreManager.getRanking());
+    private void finishGame() {
+        String player = ScoreManager.getCurrentPlayer();
+        if (player != null && !player.isBlank()) {
+            ScoreManager.commitGame(player, score);
+        }
+
+        JOptionPane.showMessageDialog(null,
+                "最終スコア: " + score + "\n" + ScoreManager.getRanking());
+
         onBackToMenu.run();
     }
 }
