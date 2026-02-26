@@ -1,6 +1,0 @@
-*.class
-bin/
-out/
-*.jar
-*.log
-build_fat/
